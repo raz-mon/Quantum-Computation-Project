@@ -293,8 +293,3 @@ def circ2514(tfd, beta, init_q0):
     bad_counts = counts.get('1000000', 0)
     prob_for_0000000 = counts['0000000'] / shots
     return [beta, bad_counts, prob_for_0000000]
-
-
-
-
-
