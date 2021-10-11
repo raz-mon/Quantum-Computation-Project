@@ -200,14 +200,14 @@ def circ25_noMeasurements_forFidelity(tfd, beta, init_q0=None):
     circuit.barrier()
 
     # Save state_vector of the system (when runing).
-    circuit.save_statevector()
 
     backend = Aer.get_backend('aer_simulator')
+    circuit.save_statevector()
     shots = 20000
     job = execute(circuit, backend, shots=shots)
 
     # Get state_vector of the system:
-    st = job.result().get_statevector()
+    st = job.result().get_statevector(circuit)
 
     # Return state_fidelity with [1] + [0]*127.
     return [state_fidelity(st, Statevector([1] + [0] * 127)), beta]
