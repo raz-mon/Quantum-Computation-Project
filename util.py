@@ -35,7 +35,7 @@ scramble_gate2_3_c.label = 'scrambler_2_3_c'
 
 # Make a circuit that makes a bell pair out of the two given qubits, give it a name.
 def create_bell_pair(qc, a, b):
-    """Creates a bell pair in qc using qubits a & b"""
+    """Creates a bell pair in QuantumCircuit qc between qubits a and b"""
     qc.h(a)  # Put qubit a into state |+>
     qc.cx(a, b)  # CNOT with a as control and b as target
 
@@ -51,6 +51,11 @@ inv_Bell_gate = inv_Bell_circ.to_gate(label='inv_bell')
 
 
 def circ25(tfd, beta, init_q0=None):
+    """ Given a tfd state, a temperature (in the form of beta, which is 1/T) and an initial state for q0 (random
+    if given no such argument), returns a list consisting of the given beta, the amount of 'bad counts' (the amount
+    of counts of the state |1000000>) and the successful measurement probability"""
+    # Reminder: qubit 3 is 5 and 5 is 3. With this transformation, we get the right couples as in the article.
+
     # circuit will be our main circuit.
     qreg_q = QuantumRegister(7, 'q')
     creg_c = ClassicalRegister(7, 'c')
@@ -80,8 +85,6 @@ def circ25(tfd, beta, init_q0=None):
     # Save the inverse of the gate (in order to return later to the state psi - with the 'target' qubit of the teleportation)
     inverse_init_gate = init_gate.gates_to_uncompute()
     inverse_init_gate.label = 'inverse_init_gate'
-
-    # Reminder: qubit 3 is 5 and 5 is 3. With this transformation, we get the right couples as in the article.
 
     # Here we initialize qubits 1-6 states as the tfd, which we constructed in Mathematica:
     psi2 = tfd
@@ -118,23 +121,20 @@ def circ25(tfd, beta, init_q0=None):
 
     # Add the measurement of qubit 6, to classical bit 6:
     circuit.measure(qreg_q[6], creg_c[6])
-    # circuit.draw()
-
-    from qiskit.visualization import plot_histogram, plot_bloch_multivector, array_to_latex
-    # %matplotlib inline
 
     # backend = BasicAer.get_backend('qasm_simulator')
     backend = Aer.get_backend('aer_simulator')
     shots = 20000
     job = execute(circuit, backend, shots=shots)
     counts = job.result().get_counts()
-
     bad_counts = counts.get('1000000', 0)
-
     prob_for_0000000 = counts['0000000'] / shots
     return [beta, bad_counts, prob_for_0000000]
 
 def circ25_noMeasurements_forFidelity(tfd, beta, init_q0=None):
+    """Exactly as circ25, only here we eliminate the measurements of all qubits. This is done so the system
+    quantum state won't collapse, which is necessary for the measurement of the state fidelity"""
+
     # circuit will be our main circuit.
     qreg_q = QuantumRegister(7, 'q')
     creg_c = ClassicalRegister(7, 'c')
@@ -192,24 +192,14 @@ def circ25_noMeasurements_forFidelity(tfd, beta, init_q0=None):
 
     circuit.barrier()
 
-    # Measure qubits 2, 5. Save result in corresponding classical bits.
-    # circuit.measure([qreg_q[2], qreg_q[5]], [creg_c[2], creg_c[5]])
-
     # Append to the circuit the inverse of 'init_gate' on qubit 6 (the 'target'):
     circuit.append(inverse_init_gate, [qreg_q[6]])
 
     circuit.barrier()
 
-    # Add the measurement of qubit 6, to classical bit 6:
-    # circuit.measure(qreg_q[6], creg_c[6])
-    # circuit.draw()
-
-    from qiskit.visualization import plot_histogram, plot_bloch_multivector, array_to_latex
-
     # Save state_vector of the system (when runing).
     circuit.save_statevector()
 
-    # backend = BasicAer.get_backend('qasm_simulator')
     backend = Aer.get_backend('aer_simulator')
     shots = 20000
     job = execute(circuit, backend, shots=shots)
@@ -221,13 +211,10 @@ def circ25_noMeasurements_forFidelity(tfd, beta, init_q0=None):
     return [state_fidelity(st, Statevector([1] + [0] * 127)), beta]
 
 
-    # counts = job.result().get_counts()
-    # bad_counts = counts.get('1000000', 0)
-    # prob_for_0000000 = counts['0000000'] / shots
-    # return [beta, bad_counts, prob_for_0000000]
-
-
 def circ2514(tfd, beta, init_q0):
+    """ Exactly as circ25, only here we measure the state of qubits 1 and 4 additionaly."""
+    # Reminder: qubit 5 is qubit 3 and 3 is 5 from the moment qubits 1-6 are initialized in the TFD state.
+
     # circuit will be our main circuit.
     qreg_q = QuantumRegister(7, 'q')
     creg_c = ClassicalRegister(7, 'c')
@@ -295,12 +282,7 @@ def circ2514(tfd, beta, init_q0):
 
     # Add the measurement of qubit 6, to classical bit 6:
     circuit.measure(qreg_q[6], creg_c[6])
-    # circuit.draw()
 
-    from qiskit.visualization import plot_histogram, plot_bloch_multivector, array_to_latex
-    # %matplotlib inline
-
-    # backend = BasicAer.get_backend('qasm_simulator')
     backend = Aer.get_backend('aer_simulator')
     shots = 20000
     job = execute(circuit, backend, shots=shots)
