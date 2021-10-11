@@ -24,7 +24,7 @@ latex_names = ['$a \\cdot x+b$', '$a \\cdot x^{b}$', '$a \\cdot e^{b \\cdot x}$'
                '$ax^{2}+bx+c$', '$ax^3+bx^2+cx+d$', '$a$']
 models = [lin_fun, power_fun, exp_fun, cos_fun, sin_fun, poly2_fun, poly3_fun, const_fun]
 
-
+# This is a change..
 
 """
 # Code that generates fits for px0 and mean_20 (unsuccessful teleportation, successful measurement probability).
