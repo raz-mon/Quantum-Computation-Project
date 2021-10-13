@@ -117,10 +117,30 @@ def run_exp_fid(file_name, b0, bf, step, init_q0 = None):
             writer.writerow(data)
     # f closes automatically here (due to 'with').
 
+
+# Getting the limit of the TFD state for large beta (T->0):
+for beta in [100, 200, 300, 400, 500, 1000, 10000, 100000]:
+    gen = tfd_generator()
+    tfd = gen.generate_tfd(beta)
+    data = circ25(tfd, beta, 'pz0')
+    print(data)
+
+
+
 """
-# Fidelity experiment:
-run_exp_fid('fid_test', 0, 1.25, 0.5)
-state_fid_plot('fid_test.csv')
+# Fidelity experiment for the fixed initial state:
+for eig_state in ['px0', 'px1', 'py0', 'py1', 'pz0', 'pz1']:
+    file_name = eig_state + '_fid'
+    run_exp_fid(file_name, 0, 1.25, 0.01, eig_state)
+    state_fid_plot(file_name+'.csv')
+"""
+
+"""
+# Fidelity experiment for the random initial state:
+for i in range(20):
+    file_name = 'random_init_fidelity'+str(i)
+    run_exp_fid(file_name, 0, 1.25, 0.01)
+    state_fid_plot(file_name+'.csv')
 """
 
 """
