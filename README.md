@@ -4,7 +4,7 @@ The code files of the project I performed in Quantum Computation, under the guid
 Here you can find an explaination of how to run the project files properly.
 
 The 'whole_process.py' module contains the whole process (surprisingly) of generating a TFD state given a value for beta (1/T).
-It import the functions 'circ25' and 'circ25_noMeasurements_forFidelity' from the module 'util.py', which in turn recieves a TFD state, a temperature (in the form of beta) and an initial state for q0 (in the form of a string, see module), runs the circuit of the experiment on the wanted simulator and returns the results.
+It imports the functions 'circ25' and 'circ25_noMeasurements_forFidelity' from the module 'util.py', which in turn recieves a TFD state, a temperature (in the form of beta) and an initial state for q0 (in the form of a string, see module), *runs* the circuit of the experiment on the **wanted** simulator ***and*** returns the results.
 
 In 'whole_process.py', the function 'run_exp' and 'run_exp_fid' perform the whole process of altering the temperature in a wanted range (via beta), performing the experiment and writing the results in a .csv file.
 
