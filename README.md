@@ -13,7 +13,3 @@ From these results, we later generate plots and fits using the 'plots.py' and 'f
 That's quite it. I have not uploaded to this page all of he data I have collected (the data used for the project graphs) since it's quite a lot. If interested in it, may freely email me at razmon@post.bgu.ac.il or at razmonsonego2@gmail.com, and I'll hapilly transfer the files by request.
 
 Have fun :)
-
-#Raz is the boss
-
-##Loving this##
