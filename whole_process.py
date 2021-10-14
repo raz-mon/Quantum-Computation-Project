@@ -118,13 +118,6 @@ def run_exp_fid(file_name, b0, bf, step, init_q0 = None):
     # f closes automatically here (due to 'with').
 
 
-# Getting the limit of the TFD state for large beta (T->0):
-for beta in [100, 200, 300, 400, 500, 1000, 10000, 100000]:
-    gen = tfd_generator()
-    tfd = gen.generate_tfd(beta)
-    data = circ25(tfd, beta, 'pz0')
-    print(data)
-
 
 
 """
@@ -177,7 +170,14 @@ generate_graphs('whole_25_py1.csv')
 """
 
 
-
+"""
+# Getting the limit of the TFD state for large beta (T->0):
+for beta in [100, 200, 300, 400, 500, 1000, 10000, 100000]:
+    gen = tfd_generator()
+    tfd = gen.generate_tfd(beta)
+    data = circ25(tfd, beta, 'pz0')
+    print(data)
+"""
 
 
 

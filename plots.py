@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 
 def bad_counts_plot(file_name):
@@ -70,8 +71,45 @@ for eig_state in ['px0', 'px1', 'py0', 'py1', 'pz0', 'pz1']:
 """
 
 
+"""
+# A plot of the successful measurement probability & the bounding function:
+file_name = 'mean_20.csv'
+fd = pd.read_csv(file_name)
+ys2 = fd['probability_of_0000000'].values[:70]
+xs2 = fd['beta'].values[:70]
+plt.scatter(xs2, ys2)
 
+# Another try of a square bound:
+bounding_xs = np.arange(0, 0.35, 0.001)
+bounding_func_2 = lambda x: -0.52*x**2 + 0.026*x + 0.24
+plt.plot(bounding_xs, [bounding_func_2(x) for x in bounding_xs], color='orange')
 
+plt.title('lower bound for successful measurement probability')
+plt.ylabel('successful measurement probability')
+plt.xlabel('$\\beta$ $\left[\\frac{1}{J}\\right]$')
+plt.legend(['f(x)=$-0.52 \\cdot x^{2} + 0.025 \\cdot x + 0.24$', 'successful measurement probability'])
+plt.show()
+"""
+
+"""
+# Plot of the unsuccessful teleportation counts vs. beta & the bounding function:
+file_name = 'mean_20.csv'
+fd = pd.read_csv(file_name)
+ys2 = fd['bad_counts'].values[:70]
+xs2 = fd['beta'].values[:70]
+plt.scatter(xs2, ys2)
+
+# Another try of a square bound:
+bounding_xs = np.arange(0, 0.35, 0.001)
+bounding_func_2 = lambda x: 5000*x**2 + 175*x + 9
+plt.plot(bounding_xs, [bounding_func_2(x) for x in bounding_xs], color='orange')
+
+plt.title('bounding function for unsuccessful teleportaiton counts')
+plt.ylabel('unsuccessful teleportation counts')
+plt.xlabel('$\\beta$ $\left[\\frac{1}{J}\\right]$')
+plt.legend(['f(x)=$5000 \\cdot x^{2} + 175 \\cdot x + 9$', 'unsuccessful teleportation counts'])
+plt.show()
+"""
 
 
 
