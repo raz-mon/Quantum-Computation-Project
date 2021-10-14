@@ -119,7 +119,7 @@ def run_exp_fid(file_name, b0, bf, step, init_q0 = None):
 
 
 
-
+# Below is SOME of the code with which I generated the data and plots of the project.
 """
 # Fidelity experiment for the fixed initial state:
 for eig_state in ['px0', 'px1', 'py0', 'py1', 'pz0', 'pz1']:

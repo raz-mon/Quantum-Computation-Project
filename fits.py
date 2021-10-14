@@ -13,11 +13,6 @@ sin_fun                = lambda x, a, b: a * (np.sin(b * x))
 poly2_fun              = lambda x, a, b, c: a * (x ** 2) + b * x + c
 poly3_fun              = lambda x, a, b, c, d: a * (x ** 3) + b * (x ** 2) + c * x + d
 const_fun              = lambda x, a: x*0+a
-#cos2_fun               = lambda x,a,b: a * (np.cos(b*x))**2
-# normalised_gauss_fun   = lambda x,a,b: 1/b*(np.sqrt(2*np.pi))*np.exp(-0.5*((x-a)/(b))**2)
-# gauss_fun              = lambda x,a,b,C: C*np.exp(-0.5*((x-a)**2/b**2))
-#normalised_poisson_fun = lambda x,a: (( a ** x ) * np.exp((-1)*a)) /(np.math.factorial((x)))
-# poisson_fun            = lambda x,a,b: b *(( a ** x ) * np.exp((-1)*a)) /(np.math.factorial((x)))
 
 names = ['linear', 'power', 'exp', 'cos', 'sin', 'poly2', 'poly3', 'constant']
 latex_names = ['$a \\cdot x+b$', '$a \\cdot x^{b}$', '$a \\cdot e^{b \\cdot x}$', '$a \\cdot \\cos{(bx)}$', '$a \\cdot \\sin{(bx)}$',
@@ -26,23 +21,8 @@ models = [lin_fun, power_fun, exp_fun, cos_fun, sin_fun, poly2_fun, poly3_fun, c
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
-# Here is all the code I used to generate ALL THE FITS OF THE PAPER (mostly by order of appearance in the paper).
+# Here is all the code I used to generate ALL THE FITS OF THE PROJECT (by order of appearance in the paper).
 
 
 # px0, successful measurement probability vs. beta - linear.
