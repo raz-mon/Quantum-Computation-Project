@@ -15,7 +15,7 @@ class tfd_generator(object):
 
     def __init__(self):
         calc = self.calc_evals_evecs()
-        self.evals0 = calc[0] - min(calc[0])
+        self.evals0 = calc[0] - min(calc[0])                # Normalized to 0 as min.
         self.evecs = np.transpose(calc[1])
 
     def pzi(self, i):
@@ -88,7 +88,7 @@ class tfd_generator(object):
         return tfd
 
 
-def run_exp(file_name, b0, bf, step, init_q0 = None):
+def run_exp(file_name, b0, bf, step, init_q0=None):
     """ Runs the experiment, for b in range of b0->bf, with step step"""
     with open(file_name + '.csv', 'w', newline='') as f:
         writer = csv.writer(f)
@@ -118,8 +118,8 @@ def run_exp_fid(file_name, b0, bf, step, init_q0 = None):
     # f closes automatically here (due to 'with').
 
 
-
 # Below is SOME of the code with which I generated the data and plots of the project.
+
 """
 # Fidelity experiment for the fixed initial state:
 for eig_state in ['px0', 'px1', 'py0', 'py1', 'pz0', 'pz1']:

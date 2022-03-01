@@ -134,8 +134,10 @@ def circ25(tfd, beta, init_q0=None):
     return [beta, bad_counts, prob_for_0000000]
 
 def circ25_noMeasurements_forFidelity(tfd, beta, init_q0=None):
-    """Exactly as circ25, only here we eliminate the measurements of all qubits. This is done so the system
-    quantum state won't collapse, which is necessary for the measurement of the state fidelity"""
+    """
+    Exactly as circ25, only here we eliminate the measurements of all qubits. This is done so the system
+    quantum state won't collapse, which is necessary for the measurement of the state fidelity
+    """
 
     # circuit will be our main circuit.
     qreg_q = QuantumRegister(7, 'q')

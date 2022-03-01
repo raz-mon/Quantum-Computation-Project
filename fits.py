@@ -19,6 +19,35 @@ latex_names = ['$a \\cdot x+b$', '$a \\cdot x^{b}$', '$a \\cdot e^{b \\cdot x}$'
                '$ax^{2}+bx+c$', '$ax^3+bx^2+cx+d$', '$a$']
 models = [lin_fun, power_fun, exp_fun, cos_fun, sin_fun, poly2_fun, poly3_fun, const_fun]
 
+# mean_20, state fidelity vs. beta - Linear.
+
+# Get needed vars for the fit.
+file_name = 'mean_20_csv.csv'
+x_col = 'beta'
+y_col = 'state_fid'
+model_str = 'poly3'
+graph_title = 'mean_20 state fidelity with $\left|0000000\\right\\rangle$ vs. $\\beta$'
+x_title = '$\\beta$ $\left[\\frac{1}{J}\\right]$'
+y_title = 'fidelity'
+
+# Generate fit & graph.
+fd = pd.read_csv(file_name)
+xs = fd[x_col].values[:125]
+ys = fd[y_col].values[:125]
+
+
+def generate_fit(model, xs, ys):
+    reg = Chi2Regression(models[names.index(model)], xs, ys)
+    opt = Minuit(reg)
+    opt.migrad()
+    tit = graph_title + ', ' + 'fit: f(x)=' + latex_names[names.index(model)]
+    plt.title(tit)
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    reg.show()
+
+
+generate_fit(model_str, xs, ys)
 
 
 """
