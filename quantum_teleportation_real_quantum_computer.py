@@ -29,7 +29,7 @@ def new_bob_gates(qc, a, b, c):
     qc.cz(a, c)
 
 
-qc = QuantumCircuit(3,1)
+qc = QuantumCircuit(3, 1)
 
 # First, let's initialize Alice's q0
 qc.append(init_gate, [0])
@@ -70,6 +70,7 @@ from qiskit.tools.monitor import job_monitor
 # Over 7 qubits (what's necessary for the scrambling scheme):
 backend = least_busy(provider.backends(filters=lambda b: b.configuration().n_qubits >= 7 and
                                    not b.configuration().simulator and b.status().operational == True))
+
 t_qc = transpile(qc, backend, optimization_level=3)
 job = backend.run(t_qc)
 job_monitor(job)  # displays job status under cell

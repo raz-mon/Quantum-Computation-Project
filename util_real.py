@@ -1,4 +1,10 @@
 import numpy as np
+from qiskit.extensions import UnitaryGate
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from qiskit import IBMQ, transpile
+from qiskit.visualization import plot_histogram
+import whole_process
+
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, Aer, execute
 from qiskit.quantum_info import random_statevector, state_fidelity, Statevector
 from qiskit.extensions import Initialize, UnitaryGate
@@ -53,7 +59,7 @@ inv_Bell_circ = circ.inverse()
 inv_Bell_gate = inv_Bell_circ.to_gate(label='inv_bell')
 
 
-def circ25_real(tfd, beta, init_q0=None):
+def circ25_real():
     """
     Exactly as circ25, only here we eliminate the measurements of all qubits. This is done so the system
     quantum state won't collapse, which is necessary for the measurement of the state fidelity
@@ -64,40 +70,18 @@ def circ25_real(tfd, beta, init_q0=None):
     creg_c = ClassicalRegister(7, 'c')
     circuit = QuantumCircuit(qreg_q, creg_c)
 
-    if not init_q0 is None:
-        if init_q0 == 'pz0':
-            psi = [1, 0]
-        elif init_q0 == 'pz1':
-            psi = [0, 1]
-        elif init_q0 == 'px0':
-            psi = [1/np.sqrt(2), 1/np.sqrt(2)]
-        elif init_q0 == 'px1':
-            psi = [1/np.sqrt(2), -1/np.sqrt(2)]
-        elif init_q0 == 'py0':
-            psi = [-1j/np.sqrt(2), -1/np.sqrt(2)]
-        elif init_q0 == 'py1':
-            psi = [-1j/np.sqrt(2), 1/np.sqrt(2)]
-    else:
-        # Generating a random state_vector:
-        psi = random_statevector(dims=2)
+    # q0 <- px0. Initialize the first qubit with the first eigenstate of pauli x (corresponding to eigenvalue 1 - |+>).
+    circuit.h(qreg_q[0])
 
-    # Make a gate from this operator:
-    init_gate = Initialize(psi)
-    init_gate.label = 'init_gate'
-
-    # Save the inverse of the gate (in order to return later to the state psi - with the 'target' qubit of the teleportation)
-    inverse_init_gate = init_gate.gates_to_uncompute()
-    inverse_init_gate.label = 'inverse_init_gate'
-
-    # Reminder: qubit 3 is 5 and 5 is 3. With this transformation, we get the right couples as in the article.
-
+    # Make Bell pairs from the qubits (0, 3), (1, 4), (2, 5), which corresponds to the tfd state of
+    # maximum correlation (infinite temperature).
+    # create_bell_pair(circuit, qreg_q[0], qreg_q[3])
+    # create_bell_pair(circuit, qreg_q[1], qreg_q[4])
+    # create_bell_pair(circuit, qreg_q[2], qreg_q[5])
     # Here we initialize qubits 1-6 states as the tfd, which we constructed in Mathematica:
-    psi2 = tfd
+    psi2 = whole_process.tfd_generator().generate_tfd(0.25)
     init_gate_1_6 = Initialize(psi2)
     init_gate_1_6.label = 'init_gate 1-6'
-
-    # Add the initializing gate to the first qubit (the one to be teleported).
-    circuit.append(init_gate, [qreg_q[0]])
 
     # Add the initializing gate to qubits 1-6.
     circuit.append(init_gate_1_6, [qreg_q[1], qreg_q[2], qreg_q[3], qreg_q[4], qreg_q[5], qreg_q[6]])
@@ -117,19 +101,37 @@ def circ25_real(tfd, beta, init_q0=None):
     circuit.barrier()
 
     # Append to the circuit the inverse of 'init_gate' on qubit 6 (the 'target'):
-    circuit.append(inverse_init_gate, [qreg_q[6]])
+    # circuit.append(inverse_init_gate, [qreg_q[6]])
+    circuit.h(qreg_q[6])            # Append the inverse gate of the initializing gate of q0.
 
-    circuit.barrier()
+    # Measure qubits 2, 5. Save result in corresponding classical bits.
+    circuit.measure([qreg_q[2], qreg_q[5]], [creg_c[2], creg_c[5]])
+    # Add the measurement of qubit 6, to classical bit 6:
+    circuit.measure(qreg_q[6], creg_c[6])
 
-    # Save state_vector of the system (when runing).
+    IBMQ.load_account()
+    provider = IBMQ.get_provider(hub='ibm-q-research-2', group='ben-gurion-uni-1', project='main')
 
-    backend = Aer.get_backend('aer_simulator')
-    circuit.save_statevector()
-    shots = 20000
-    job = execute(circuit, backend, shots=shots)
+    # get the least-busy backend at IBM and run the quantum circuit there
+    from qiskit.providers.ibmq import least_busy
+    from qiskit.tools.monitor import job_monitor
 
-    # Get state_vector of the system:
-    st = job.result().get_statevector(circuit)
+    backend = least_busy(provider.backends(filters=lambda b: b.configuration().n_qubits >= 7 and
+                                                             not b.configuration().simulator and b.status().operational == True))
+    t_qc = transpile(circuit, backend, optimization_level=1)
+    job = backend.run(t_qc)
+    job_monitor(job)  # displays job status under cell
 
-    # Return state_fidelity with [1] + [0]*127.
-    return [state_fidelity(st, Statevector([1] + [0] * 127)), beta]
+    # Get the results and display them
+    exp_result = job.result()
+    exp_counts = exp_result.get_counts(circuit)
+    good = exp_counts.get('0000000', 0)
+    bad = exp_counts.get('1000000', 0)
+    # Fidelity - TBD.
+    print('successful measurement probability: ', good/1024)
+    print('unsuccessful teleportation counts: ', bad/1024)
+    # print(exp_counts)
+    plot_histogram(exp_counts)
+
+
+circ25_real()
