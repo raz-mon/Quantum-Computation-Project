@@ -4,8 +4,8 @@ from qiskit import IBMQ
 # IBMQ.providers()    # List all available providers
 
 # IBMQ.enable_account('1d4191db89ee7da833edc414dd5cf2b08d47a658b81cee8992b14b9c8b49dbcb925945df9a46e5f472612160d8c85762fa78c25fd67ccd5b3aa99d0ca5169d16', hub='ibm-q', group='open', project='main')
-# Raz's account: IBMQ.save_account('1d4191db89ee7da833edc414dd5cf2b08d47a658b81cee8992b14b9c8b49dbcb925945df9a46e5f472612160d8c85762fa78c25fd67ccd5b3aa99d0ca5169d16')
-# Shira's account: IBMQ.save_account('0bb8d57a4ce7a0f492bfb515c7cab810ff15e014e6cb71263ebc6a8d74809f21f2cf1fe4a9a30ef18e0835a9bb711407da5b799f5fe391d0258f950d610f2783', overwrite='true')
+# Raz's account: IBMQ.save_account('---')
+# Shira's account: IBMQ.save_account('---', overwrite='true')
 IBMQ.load_account()
 # print(IBMQ.providers())
 
