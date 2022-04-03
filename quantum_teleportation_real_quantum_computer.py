@@ -1,5 +1,3 @@
-
-
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qiskit import IBMQ, Aer, transpile, assemble
 from qiskit.visualization import plot_histogram, plot_bloch_multivector, array_to_latex
@@ -52,7 +50,6 @@ qc.measure(2, 0)
 
 # View the results:
 qc.draw()
-
 
 # First, see what devices we are allowed to use by loading our saved accounts
 IBMQ.load_account()

@@ -201,7 +201,7 @@ def circ25_noMeasurements_forFidelity(tfd, beta, init_q0=None):
 
     circuit.barrier()
 
-    # Save state_vector of the system (when runing).
+    # Save state_vector of the system (when running).
 
     backend = Aer.get_backend('aer_simulator')
     circuit.save_statevector()
