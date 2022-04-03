@@ -24,7 +24,7 @@ def infinite_temp(framework):
     # Prepare a tfd state in the max coherence state (T->inf) and measure fidelity.
     tfd_ref = tfd_generator().generate_tfd(0)           # Beta=0 <==> T->infty.
 
-    if framework=='real':
+    if framework == 'real':
         # Load account settings:
         IBMQ.load_account()
         provider = IBMQ.get_provider(hub='ibm-q-research-2', group='ben-gurion-uni-1', project='main')
@@ -70,7 +70,7 @@ def zero_temp(framework):
     # Prepare a tfd state in the zero coherence state (T->inf) and measure fidelity.
     tfd_ref = tfd_generator().generate_tfd(pow(10, 8))  # Very large beta.
 
-    if framework=='real':
+    if framework == 'real':
         # Load account settings:
         IBMQ.load_account()
         provider = IBMQ.get_provider(hub='ibm-q-research-2', group='ben-gurion-uni-1', project='main')
