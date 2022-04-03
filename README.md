@@ -1,7 +1,7 @@
 # Quantum-Computation-Project
 The code files of the project I performed in Quantum Computation, under the guidance of Shira Chapman.
 
-### How to run the project:
+## How to run the project:
 
 The 'whole_process.py' module contains the whole process (surprisingly) of generating a TFD state given a value for beta (1/T).
 It imports the functions 'circ25' and 'circ25_noMeasurements_forFidelity' from the module 'util.py', which in turn recieves a TFD state, a temperature (in the form of beta) and an initial state for q0 (in the form of a string, see module), runs the circuit of the experiment on the wanted simulator and returns the results.
